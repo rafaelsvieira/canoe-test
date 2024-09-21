@@ -72,3 +72,30 @@ $ docker push aws_account_id.dkr.ecr.region.amazonaws.com/my-repository:tag
 
 The values `aws_account_id`, `region` and `my-repository:tag` should be changed to real values.
 
+## Taks 2
+
+This task consists of building the architecture described in the following image.
+
+![Architecture](doc/img/architecture.png)
+
+The infrastructure is being provisioned using [Terraform](https://www.terraform.io/). To see all the code check the folder `infra/`.
+
+After filling in the environment file (tfvars) just execute the follow commands:
+
+```sh
+$ terraform init
+$ terraform plan -var-file="environment/dev.tfvars"
+$ terraform apply -auto-approve -var-file="environment/dev.tfvars"
+```
+
+To destroy the infrastructure just execute the follow command:
+
+```sh
+$ terraform destroy -auto-approve -var-file="environment/dev.tfvars"
+```
+
+`Some important points`:
+
+- The state file is being stored locally, because it's just a test. If it was a real project, the state file would be stored in another place, for example, AWS S3;
+- There are a lot of ways to deploy a new task definition, one of them is using CodeDeploy with deployment strategy;
+- Using GitHub Actions as a pipeline, it's possible to use the action [amazon-ecs-deploy-task-definition](https://github.com/aws-actions/amazon-ecs-deploy-task-definition?tab=readme-ov-file#aws-codedeploy-support) with CodeDeploy to manage the deployment.
